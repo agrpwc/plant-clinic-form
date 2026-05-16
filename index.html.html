@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แบบฟอร์มนัดหมายส่งตัวอย่าง — คลินิกสุขภาพพืช กำแพงแสน</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=IBM+Plex+Sans+Thai:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green:       #0A5C44;
+  --green-mid:   #1D9E75;
+  --green-light: #E8F5F0;
+  --green-pale:  #F4FAF7;
+  --amber:       #B45309;
+  --amber-light: #FEF3C7;
+  --red:         #991B1B;
+  --red-light:   #FEF2F2;
+  --gray-900:    #111827;
+  --gray-700:    #374151;
+  --gray-500:    #6B7280;
+  --gray-300:    #D1D5DB;
+  --gray-100:    #F9FAFB;
+  --white:       #FFFFFF;
+  --shadow-sm:   0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.05);
+  --shadow-md:   0 4px 12px rgba(0,0,0,.08), 0 2px 6px rgba(0,0,0,.05);
+  --radius:      10px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Sarabun', sans-serif;
+  background: #F0F4F2;
+  color: var(--gray-900);
+  min-height: 100vh;
+  padding: 0 0 60px;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: var(--green);
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+}
+.header-leaf {
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,.15);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.header-text h1 { font-size: 15px; font-weight: 600; color: #fff; line-height: 1.3; }
+.header-text p  { font-size: 11.5px; color: rgba(255,255,255,.7); margin-top: 1px; }
+
+/* ── PROGRESS ── */
+.progress-wrap {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-300);
+  padding: 14px 24px;
+  position: sticky; top: 72px; z-index: 90;
+}
+.progress-steps {
+  display: flex; align-items: center; gap: 0;
+  max-width: 600px; margin: 0 auto;
+}
+.ps { display: flex; align-items: center; gap: 6px; flex: 1; }
+.ps-dot {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--gray-300); color: var(--gray-500);
+  font-size: 11px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: all .3s;
+}
+.ps-dot.active { background: var(--green); color: #fff; }
+.ps-dot.done   { background: var(--green-mid); color: #fff; }
+.ps-label { font-size: 11px; color: var(--gray-500); white-space: nowrap; }
+.ps-label.active { color: var(--green); font-weight: 600; }
+.ps-line { flex: 1; height: 2px; background: var(--gray-300); margin: 0 6px; }
+.ps-line.done { background: var(--green-mid); }
+
+/* ── MAIN ── */
+.form-container {
+  max-width: 640px;
+  margin: 28px auto 0;
+  padding: 0 16px;
+}
+
+/* ── SECTION CARD ── */
+.section-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 16px;
+  overflow: hidden;
+  display: none;
+}
+.section-card.active { display: block; }
+
+.section-header {
+  background: var(--green-light);
+  border-bottom: 1px solid #C6E8DC;
+  padding: 14px 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-num {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--green); color: #fff;
+  font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.section-title { font-size: 14px; font-weight: 600; color: var(--green); }
+.section-sub   { font-size: 11.5px; color: var(--gray-500); margin-top: 1px; }
+
+.section-body { padding: 20px; }
+
+/* ── FIELDS ── */
+.field { margin-bottom: 16px; }
+.field:last-child { margin-bottom: 0; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.field-row:last-child { margin-bottom: 0; }
+
+label {
+  display: block;
+  font-size: 12.5px; font-weight: 500; color: var(--gray-700);
+  margin-bottom: 5px;
+}
+label .req { color: #DC2626; margin-left: 2px; }
+label .hint-tag {
+  font-size: 10px; font-weight: 400; color: var(--gray-500);
+  background: var(--gray-100); padding: 1px 5px; border-radius: 3px;
+  margin-left: 5px;
+}
+
+input[type="text"], input[type="tel"], input[type="email"],
+input[type="date"], select, textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: 7px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 13.5px;
+  color: var(--gray-900);
+  background: #fff;
+  transition: border-color .2s, box-shadow .2s;
+  appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--green-mid);
+  box-shadow: 0 0 0 3px rgba(29,158,117,.12);
+}
+textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+
+/* ── SERVICE CARDS ── */
+.service-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px; margin-bottom: 12px;
+}
+.service-option { position: relative; }
+.service-option input[type="radio"] { position: absolute; opacity: 0; width: 0; }
+.service-card {
+  border: 1.5px solid var(--gray-300);
+  border-radius: 8px;
+  padding: 11px 12px;
+  cursor: pointer;
+  transition: all .2s;
+  background: #fff;
+  display: block;
+}
+.service-card:hover { border-color: var(--green-mid); background: var(--green-pale); }
+.service-option input:checked + .service-card {
+  border-color: var(--green);
+  background: var(--green-light);
+  box-shadow: 0 0 0 2px rgba(10,92,68,.1);
+}
+.sc-name  { font-size: 13px; font-weight: 600; color: var(--gray-900); margin-bottom: 2px; }
+.service-option input:checked + .service-card .sc-name { color: var(--green); }
+.sc-price { font-size: 12px; color: var(--amber); font-weight: 500; }
+.sc-tat   { font-size: 11px; color: var(--gray-500); margin-top: 2px; }
+
+/* ── PRICE BOX ── */
+.price-box {
+  background: var(--green-light);
+  border: 1px solid #C6E8DC;
+  border-radius: 8px;
+  padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px; transition: all .3s;
+}
+.price-box.hidden { opacity: 0; pointer-events: none; }
+.price-label { font-size: 12px; color: var(--gray-700); }
+.price-label span { display: block; font-size: 11px; color: var(--gray-500); margin-top: 2px; }
+.price-value { font-size: 22px; font-weight: 700; color: var(--green); }
+.price-tat   { font-size: 11.5px; color: var(--gray-500); text-align: right; margin-top: 2px; }
+
+/* ── PHOTO UPLOAD ── */
+.photo-drop {
+  border: 2px dashed var(--gray-300);
+  border-radius: 8px;
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+  background: var(--gray-100);
+}
+.photo-drop:hover { border-color: var(--green-mid); background: var(--green-pale); }
+.photo-drop input { display: none; }
+.photo-drop-icon { font-size: 28px; margin-bottom: 6px; }
+.photo-drop-text { font-size: 12.5px; color: var(--gray-500); line-height: 1.6; }
+.photo-preview { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.photo-thumb {
+  width: 72px; height: 72px;
+  border-radius: 6px; object-fit: cover;
+  border: 1.5px solid var(--gray-300);
+}
+
+/* ── CHECKBOX / RADIO ── */
+.check-group { display: flex; flex-direction: column; gap: 8px; }
+.check-item  { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; }
+.check-item input { margin-top: 2px; accent-color: var(--green); width: 15px; height: 15px; flex-shrink: 0; }
+.check-label { font-size: 13px; color: var(--gray-700); line-height: 1.5; }
+
+/* ── TIME SLOTS ── */
+.time-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; }
+.time-opt  { position: relative; }
+.time-opt input { position: absolute; opacity: 0; width: 0; }
+.time-btn {
+  display: block; text-align: center;
+  padding: 9px; border-radius: 7px;
+  border: 1.5px solid var(--gray-300);
+  font-size: 12.5px; color: var(--gray-700);
+  cursor: pointer; transition: all .2s; background: #fff;
+}
+.time-btn:hover { border-color: var(--green-mid); }
+.time-opt input:checked + .time-btn {
+  border-color: var(--green); background: var(--green-light);
+  color: var(--green); font-weight: 600;
+}
+
+/* ── BUTTONS ── */
+.btn-row { display: flex; gap: 10px; margin-top: 20px; }
+.btn {
+  padding: 11px 24px; border-radius: 8px;
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; border: none; transition: all .2s;
+  display: flex; align-items: center; gap: 6px;
+}
+.btn-primary {
+  background: var(--green); color: #fff; flex: 1;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(10,92,68,.3);
+}
+.btn-primary:hover { background: #074a36; transform: translateY(-1px); }
+.btn-back {
+  background: var(--white); color: var(--gray-700);
+  border: 1.5px solid var(--gray-300); padding: 11px 18px;
+}
+.btn-back:hover { background: var(--gray-100); }
+
+/* ── SUCCESS ── */
+.success-screen {
+  text-align: center; padding: 40px 20px;
+  display: none;
+}
+.success-screen.show { display: block; }
+.success-icon { font-size: 60px; margin-bottom: 16px; }
+.success-title { font-size: 20px; font-weight: 700; color: var(--green); margin-bottom: 8px; }
+.success-sub { font-size: 13.5px; color: var(--gray-500); line-height: 1.7; margin-bottom: 20px; }
+.sample-id-box {
+  background: var(--green-light); border: 1px solid #C6E8DC;
+  border-radius: 10px; padding: 16px; display: inline-block;
+  margin-bottom: 24px;
+}
+.sample-id-label { font-size: 11px; color: var(--gray-500); margin-bottom: 4px; }
+.sample-id-val { font-size: 24px; font-weight: 700; color: var(--green); letter-spacing: 2px; }
+
+/* ── VALIDATION ── */
+.field-error { font-size: 11.5px; color: var(--red); margin-top: 4px; display: none; }
+input.invalid, select.invalid, textarea.invalid { border-color: var(--red) !important; }
+
+/* ── FOOTER ── */
+.form-footer {
+  text-align: center; margin-top: 28px;
+  font-size: 11.5px; color: var(--gray-500); line-height: 1.8;
+}
+
+@media (max-width: 480px) {
+  .field-row { grid-template-columns: 1fr; }
+  .service-grid { grid-template-columns: 1fr; }
+  .time-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-leaf">🌿</div>
+  <div class="header-text">
+    <h1>คลินิกสุขภาพพืช กำแพงแสน</h1>
+    <p>ภาควิชาโรคพืช · คณะเกษตร · มหาวิทยาลัยเกษตรศาสตร์</p>
+  </div>
+</header>
+
+<!-- FORM HEADING -->
+<div style="background:#fff;border-bottom:2px solid #E8F5F0;padding:14px 24px;text-align:center;">
+  <div style="font-size:17px;font-weight:700;color:#0A5C44;letter-spacing:0.3px;">แบบฟอร์มนัดหมายส่งตัวอย่างพืชตรวจวินิจฉัยโรค</div>
+  <div style="font-size:11px;color:#6B7280;margin-top:3px;">กรอกข้อมูลให้ครบถ้วน · ไม่เสียค่าใช้จ่ายในการกรอก · ชำระค่าบริการที่คลินิก</div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-steps">
+    <div class="ps">
+      <div class="ps-dot active" id="dot1">1</div>
+      <div class="ps-label active" id="lbl1">ข้อมูลผู้ส่ง</div>
+    </div>
+    <div class="ps-line" id="line1"></div>
+    <div class="ps">
+      <div class="ps-dot" id="dot2">2</div>
+      <div class="ps-label" id="lbl2">ข้อมูลพืช</div>
+    </div>
+    <div class="ps-line" id="line2"></div>
+    <div class="ps">
+      <div class="ps-dot" id="dot3">3</div>
+      <div class="ps-label" id="lbl3">ประเภทตรวจ</div>
+    </div>
+    <div class="ps-line" id="line3"></div>
+    <div class="ps">
+      <div class="ps-dot" id="dot4">4</div>
+      <div class="ps-label" id="lbl4">นัดหมาย</div>
+    </div>
+  </div>
+</div>
+
+<div class="form-container">
+
+<!-- ══ STEP 1 ══ -->
+<div class="section-card active" id="step1">
+  <div class="section-header">
+    <div class="section-num">ก</div>
+    <div>
+      <div class="section-title">ข้อมูลผู้ส่งตัวอย่าง</div>
+      <div class="section-sub">กรอกข้อมูลติดต่อที่ถูกต้องเพื่อรับผลการวินิจฉัย</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="field-row">
+      <div class="field">
+        <label>ชื่อ-นามสกุล <span class="req">*</span></label>
+        <input type="text" id="fullname" placeholder="นายสมชาย ใจดี">
+        <div class="field-error" id="err-fullname">กรุณากรอกชื่อ-นามสกุล</div>
+      </div>
+      <div class="field">
+        <label>ประเภทผู้ส่ง <span class="req">*</span></label>
+        <select id="sender-type">
+          <option value="">-- เลือก --</option>
+          <option>เกษตรกร</option>
+          <option>นักวิชาการเกษตร</option>
+          <option>บริษัทเอกชน</option>
+          <option>นิสิต/นักศึกษา</option>
+          <option>หน่วยงานรัฐ</option>
+          <option>อื่นๆ</option>
+        </select>
+        <div class="field-error" id="err-sender-type">กรุณาเลือกประเภท</div>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>เบอร์โทรศัพท์ <span class="req">*</span></label>
+        <input type="tel" id="phone" placeholder="08x-xxx-xxxx">
+        <div class="field-error" id="err-phone">กรุณากรอกเบอร์โทรศัพท์</div>
+      </div>
+      <div class="field">
+        <label>LINE ID <span class="hint-tag">สำหรับรับผล</span></label>
+        <input type="text" id="line-id" placeholder="@lineid">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>อีเมล <span class="hint-tag">ถ้ามี</span></label>
+        <input type="email" id="email" placeholder="email@example.com">
+      </div>
+      <div class="field">
+        <label>หน่วยงาน / ฟาร์ม <span class="hint-tag">ถ้ามี</span></label>
+        <input type="text" id="org" placeholder="ชื่อองค์กร">
+      </div>
+    </div>
+    <div class="field">
+      <label>จังหวัดที่ปลูก <span class="req">*</span></label>
+      <select id="province">
+        <option value="">-- เลือกจังหวัด --</option>
+        <option>นครปฐม</option><option>กาญจนบุรี</option>
+        <option>สุพรรณบุรี</option><option>ราชบุรี</option>
+        <option>ประจวบคีรีขันธ์</option><option>เพชรบุรี</option>
+        <option>สมุทรสาคร</option><option>นนทบุรี</option>
+        <option>ปทุมธานี</option><option>อยุธยา</option>
+        <option>ชัยนาท</option><option>สิงห์บุรี</option>
+        <option>อ่างทอง</option><option>ลพบุรี</option>
+        <option>สระบุรี</option><option>นครราชสีมา</option>
+        <option>อื่นๆ</option>
+      </select>
+      <div class="field-error" id="err-province">กรุณาเลือกจังหวัด</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goTo(2)">ถัดไป →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STEP 2 ══ -->
+<div class="section-card" id="step2">
+  <div class="section-header">
+    <div class="section-num">ข</div>
+    <div>
+      <div class="section-title">ข้อมูลพืชและอาการ</div>
+      <div class="section-sub">ช่วยให้นักวินิจฉัยเตรียมตัวได้ก่อนรับตัวอย่าง</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="field-row">
+      <div class="field">
+        <label>ชนิดพืช <span class="req">*</span></label>
+        <input type="text" id="plant" placeholder="เช่น ข้าว, ทุเรียน, มะม่วง, พริก...">
+        <div class="field-error" id="err-plant">กรุณาระบุชนิดพืช</div>
+      </div>
+      <div class="field">
+        <label>ส่วนของพืชที่ต้องการให้ตรวจ <span class="req">*</span> <span class="hint-tag">เลือกได้หลายข้อ</span></label>
+        <div class="check-group" id="plant-part-group">
+          <label class="check-item"><input type="checkbox" name="plant-part" value="ใบ"><span class="check-label">ใบ</span></label>
+          <label class="check-item"><input type="checkbox" name="plant-part" value="ราก"><span class="check-label">ราก</span></label>
+          <label class="check-item"><input type="checkbox" name="plant-part" value="ลำต้น/กิ่ง"><span class="check-label">ลำต้น/กิ่ง</span></label>
+          <label class="check-item"><input type="checkbox" name="plant-part" value="ผล"><span class="check-label">ผล</span></label>
+          <label class="check-item"><input type="checkbox" name="plant-part" value="ทั้งต้น (มีราก)"><span class="check-label">ทั้งต้น (มีราก)</span></label>
+          <label class="check-item"><input type="checkbox" name="plant-part" value="ดิน"><span class="check-label">ดิน</span></label>
+        </div>
+        <div class="field-error" id="err-plant-part">กรุณาเลือกส่วนของพืชอย่างน้อย 1 ข้อ</div>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>อายุพืช (โดยประมาณ)</label>
+        <input type="text" id="plant-age" placeholder="เช่น 3 เดือน / 5 ปี">
+      </div>
+      <div class="field">
+        <label>ระยะการเจริญเติบโต <span class="hint-tag">เลือกได้หลายข้อ</span></label>
+        <div class="check-group">
+          <label class="check-item"><input type="checkbox" name="growth-stage" value="กล้า"><span class="check-label">กล้า</span></label>
+          <label class="check-item"><input type="checkbox" name="growth-stage" value="เจริญเติบโต"><span class="check-label">เจริญเติบโต</span></label>
+          <label class="check-item"><input type="checkbox" name="growth-stage" value="ออกดอก"><span class="check-label">ออกดอก</span></label>
+          <label class="check-item"><input type="checkbox" name="growth-stage" value="ติดผล"><span class="check-label">ติดผล</span></label>
+          <label class="check-item"><input type="checkbox" name="growth-stage" value="ใกล้เก็บเกี่ยว"><span class="check-label">ใกล้เก็บเกี่ยว</span></label>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>ลักษณะอาการที่พบ <span class="req">*</span></label>
+      <textarea id="symptoms" placeholder="อธิบายอาการที่สังเกตได้ เช่น ใบมีจุดสีน้ำตาล ขอบแผลสีเหลือง ต้นเหี่ยว ราขาว ฯลฯ"></textarea>
+      <div class="field-error" id="err-symptoms">กรุณาอธิบายอาการ</div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>ความเสียหาย (โดยประมาณ)</label>
+        <select id="damage">
+          <option>น้อยกว่า 10%</option>
+          <option>10–25%</option>
+          <option>26–50%</option>
+          <option>มากกว่า 50%</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>เคยพบอาการนี้ก่อนหรือไม่</label>
+        <select id="history">
+          <option>ไม่เคย</option>
+          <option>เคย — ครั้งนี้รุนแรงขึ้น</option>
+          <option>เคย — ครั้งนี้เหมือนเดิม</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>สารเคมี/ชีวภัณฑ์ที่เคยใช้</label>
+      <input type="text" id="chemicals" placeholder="เช่น พ่น mancozeb เมื่อ 2 สัปดาห์ก่อน หรือ ไม่เคยใช้">
+    </div>
+    <div class="field">
+      <label>ภาพถ่ายอาการ <span class="hint-tag">แนะนำ 2–3 ภาพ</span></label>
+      <div class="photo-drop" onclick="document.getElementById('photo-input').click()">
+        <input type="file" id="photo-input" accept="image/*" multiple onchange="previewPhotos(this)">
+        <div class="photo-drop-icon">📷</div>
+        <div class="photo-drop-text">กดเพื่ออัปโหลดภาพ<br><small>JPG / PNG ไม่เกิน 5 MB ต่อภาพ</small></div>
+      </div>
+      <div class="photo-preview" id="photo-preview"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-back" onclick="goTo(1)">← ย้อนกลับ</button>
+      <button class="btn btn-primary" onclick="goTo(3)">ถัดไป →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STEP 3 ══ -->
+<div class="section-card" id="step3">
+  <div class="section-header">
+    <div class="section-num">ค</div>
+    <div>
+      <div class="section-title">เลือกประเภทการตรวจ</div>
+      <div class="section-sub">ราคาเป็นประมาณการ — ชำระเงินจริงที่คลินิก</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="service-grid">
+      <div class="service-option">
+        <input type="radio" name="service" id="s1" value="กล้องจุลทรรศน์" data-price="300" data-tat="1–3 วัน" onchange="updatePrice()">
+        <label class="service-card" for="s1">
+          <div class="sc-name">🔬 กล้องจุลทรรศน์</div>
+          <div class="sc-price">300 บาท</div>
+          <div class="sc-tat">TAT: 1–3 วัน</div>
+        </label>
+      </div>
+      <div class="service-option">
+        <input type="radio" name="service" id="s2" value="Bioassay" data-price="800" data-tat="3–5 วัน" onchange="updatePrice()">
+        <label class="service-card" for="s2">
+          <div class="sc-name">🧫 Bioassay</div>
+          <div class="sc-price">800 บาท</div>
+          <div class="sc-tat">TAT: 3–5 วัน</div>
+        </label>
+      </div>
+      <div class="service-option">
+        <input type="radio" name="service" id="s3" value="ELISA" data-price="1200" data-tat="3–5 วัน" onchange="updatePrice()">
+        <label class="service-card" for="s3">
+          <div class="sc-name">🧪 ELISA</div>
+          <div class="sc-price">1,200 บาท</div>
+          <div class="sc-tat">TAT: 3–5 วัน</div>
+        </label>
+      </div>
+      <div class="service-option">
+        <input type="radio" name="service" id="s4" value="PCR / Molecular" data-price="2500" data-tat="7–10 วัน" onchange="updatePrice()">
+        <label class="service-card" for="s4">
+          <div class="sc-name">🧬 PCR / Molecular</div>
+          <div class="sc-price">2,500 บาท</div>
+          <div class="sc-tat">TAT: 7–10 วัน</div>
+        </label>
+      </div>
+      <div class="service-option">
+        <input type="radio" name="service" id="s5" value="PCR + จัดจำแนกสายพันธุ์" data-price="3500" data-tat="10–14 วัน" onchange="updatePrice()">
+        <label class="service-card" for="s5">
+          <div class="sc-name">🔬 PCR + จัดจำแนกสายพันธุ์</div>
+          <div class="sc-price">3,500 บาท</div>
+          <div class="sc-tat">TAT: 10–14 วัน</div>
+        </label>
+      </div>
+      <div class="service-option">
+        <input type="radio" name="service" id="s6" value="ขอคำปรึกษาเบื้องต้น" data-price="0" data-tat="1–3 วัน" onchange="updatePrice()">
+        <label class="service-card" for="s6">
+          <div class="sc-name">💬 ขอคำปรึกษา</div>
+          <div class="sc-price" style="color:var(--green)">ฟรี</div>
+          <div class="sc-tat">TAT: 1–3 วัน</div>
+        </label>
+      </div>
+    </div>
+
+    <div class="price-box hidden" id="price-box">
+      <div class="price-label">
+        ราคาประมาณการ
+        <span>ยังไม่รวม VAT · ชำระที่คลินิก</span>
+      </div>
+      <div>
+        <div class="price-value" id="price-val">—</div>
+        <div class="price-tat" id="price-tat"></div>
+      </div>
+    </div>
+    <div class="field-error" id="err-service" style="display:none;margin-bottom:8px">กรุณาเลือกประเภทการตรวจ</div>
+
+    <div class="field">
+      <label>ช่องทางรับรายงานผล <span class="hint-tag">เลือกได้หลายช่อง</span></label>
+      <div class="check-group">
+        <label class="check-item"><input type="checkbox" id="ch-line" checked><span class="check-label">LINE (ส่ง PDF รายงาน)</span></label>
+        <label class="check-item"><input type="checkbox" id="ch-portal"><span class="check-label">Result Portal (ดูผลเองได้ด้วย Sample ID)</span></label>
+        <label class="check-item"><input type="checkbox" id="ch-email"><span class="check-label">Email</span></label>
+      </div>
+    </div>
+    <div class="field">
+      <label>หมายเหตุเพิ่มเติม</label>
+      <textarea id="notes" placeholder="ต้องการตรวจหลายวิธีพร้อมกัน หรือมีข้อมูลเพิ่มเติมที่เกี่ยวข้อง"></textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-back" onclick="goTo(2)">← ย้อนกลับ</button>
+      <button class="btn btn-primary" onclick="goTo(4)">ถัดไป →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STEP 4 ══ -->
+<div class="section-card" id="step4">
+  <div class="section-header">
+    <div class="section-num">ง</div>
+    <div>
+      <div class="section-title">วันและเวลานัดหมาย</div>
+      <div class="section-sub">เปิดทำการ จันทร์–ศุกร์ 08:30–16:30 น.</div>
+    </div>
+  </div>
+  <div class="section-body">
+    <div class="field-row">
+      <div class="field">
+        <label>วันที่นัดหมาย / วันที่จะจัดส่ง <span class="req">*</span></label>
+        <input type="date" id="appt-date" min="">
+        <div class="field-error" id="err-date">กรุณาเลือกวันที่</div>
+      </div>
+      <div class="field">
+        <label>วิธีนำส่งตัวอย่าง <span class="req">*</span></label>
+        <div class="check-group" style="margin-top:4px">
+          <label class="check-item">
+            <input type="radio" name="delivery-method" id="dm-walkin" value="มาส่งด้วยตนเอง" onchange="toggleDelivery()">
+            <span class="check-label">🚗 มาส่งด้วยตนเอง</span>
+          </label>
+          <label class="check-item">
+            <input type="radio" name="delivery-method" id="dm-post" value="จัดส่งทางไปรษณีย์" onchange="toggleDelivery()">
+            <span class="check-label">📦 จัดส่งทางไปรษณีย์</span>
+          </label>
+        </div>
+        <div class="field-error" id="err-delivery">กรุณาเลือกวิธีนำส่ง</div>
+      </div>
+    </div>
+
+    <!-- ช่วงเวลา (แสดงเฉพาะมาด้วยตนเอง) -->
+    <div class="field" id="timeslot-section">
+      <label>ช่วงเวลา <span class="req">*</span></label>
+      <div class="time-grid">
+        <div class="time-opt">
+          <input type="radio" name="time-slot" id="t1" value="08:30–10:00">
+          <label class="time-btn" for="t1">08:30–10:00</label>
+        </div>
+        <div class="time-opt">
+          <input type="radio" name="time-slot" id="t2" value="10:00–12:00">
+          <label class="time-btn" for="t2">10:00–12:00</label>
+        </div>
+        <div class="time-opt">
+          <input type="radio" name="time-slot" id="t3" value="13:00–15:00">
+          <label class="time-btn" for="t3">13:00–15:00</label>
+        </div>
+        <div class="time-opt">
+          <input type="radio" name="time-slot" id="t4" value="15:00–16:30">
+          <label class="time-btn" for="t4">15:00–16:30</label>
+        </div>
+      </div>
+      <div class="field-error" id="err-time">กรุณาเลือกช่วงเวลา</div>
+    </div>
+
+    <!-- upload สลิปไปรษณีย์ (แสดงเฉพาะส่งไปรษณีย์) -->
+    <div class="field" id="postal-section" style="display:none">
+      <label>แนบสลิปการจัดส่งไปรษณีย์ <span class="req">*</span></label>
+      <div class="photo-drop" onclick="document.getElementById('slip-input').click()">
+        <input type="file" id="slip-input" accept="image/*,.pdf" onchange="previewSlip(this)">
+        <div class="photo-drop-icon">📄</div>
+        <div class="photo-drop-text">กดเพื่ออัปโหลดสลิป<br><small>JPG / PNG / PDF ไม่เกิน 5 MB</small></div>
+      </div>
+      <div id="slip-preview" style="margin-top:8px;font-size:12px;color:#0A5C44;"></div>
+      <div class="field-error" id="err-slip">กรุณาแนบสลิปการจัดส่ง</div>
+    </div>
+
+    <div class="field" style="margin-top:4px">
+      <!-- ข้อความสำหรับมาเอง -->
+      <div id="notice-walkin" style="background:var(--amber-light);border:1px solid #FCD34D;border-radius:8px;padding:12px 14px;font-size:12px;color:var(--amber);line-height:1.7">
+        ⚠️ <strong>ข้อควรทราบ:</strong> กรุณาเตรียมตัวอย่างพืชที่มีเนื้อเยื่อมีชีวิต ห่อด้วยกระดาษ ไม่ควรปิดสนิทในถุงพลาสติก และนำส่งภายใน 24–48 ชั่วโมงหลังเก็บ
+      </div>
+      <!-- ข้อความสำหรับส่งไปรษณีย์ -->
+      <div id="notice-postal" style="display:none;background:var(--amber-light);border:1px solid #FCD34D;border-radius:8px;padding:12px 14px;font-size:12px;color:var(--amber);line-height:1.7">
+        ⚠️ <strong>ข้อควรทราบ:</strong> กรุณาเตรียมตัวอย่างพืชที่มีเนื้อเยื่อมีชีวิต ห่อด้วยกระดาษ ไม่ควรปิดสนิทในถุงพลาสติก
+        <br>🚫 <strong>ห้ามส่งแล้วมาถึงคลินิกในช่วงวันเสาร์–อาทิตย์</strong> (คลินิกปิดทำการ ตัวอย่างจะเสียหาย)
+        <br>📦 กรุณาแนบสลิปการจัดส่งไปรษณีย์ในแบบฟอร์มนี้ด้วย
+      </div>
+    </div>
+
+    <div class="field" style="margin-top:16px">
+      <div class="check-group">
+        <label class="check-item">
+          <input type="checkbox" id="consent">
+          <span class="check-label">ยินยอมให้คลินิกใช้ข้อมูลและภาพถ่ายตัวอย่างเพื่อการศึกษาวิจัย (ปกปิดข้อมูลส่วนตัว)</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="terms" required>
+          <span class="check-label"><strong>รับทราบและยอมรับเงื่อนไขการให้บริการของคลินิก</strong> <span style="color:#DC2626">*</span></span>
+        </label>
+      </div>
+      <div class="field-error" id="err-terms">กรุณายอมรับเงื่อนไขการให้บริการ</div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-back" onclick="goTo(3)">← ย้อนกลับ</button>
+      <button class="btn btn-primary" onclick="submitForm()">✅ ส่งแบบฟอร์มและยืนยันนัดหมาย</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SUCCESS ══ -->
+<div class="success-screen" id="success-screen">
+  <div class="success-icon">🌿</div>
+  <div class="success-title">ส่งแบบฟอร์มเรียบร้อยแล้ว!</div>
+  <div class="success-sub">คลินิกสุขภาพพืชได้รับข้อมูลของท่านแล้ว<br>เจ้าหน้าที่จะยืนยันนัดหมายผ่าน LINE ภายใน 1 วันทำการ</div>
+  <div class="sample-id-box">
+    <div class="sample-id-label">รหัสอ้างอิงของท่าน</div>
+    <div class="sample-id-val" id="ref-id">PHC-2568-0001</div>
+    <div style="font-size:11px;color:var(--gray-500);margin-top:4px">กรุณาจดรหัสนี้ไว้สำหรับติดตามผล</div>
+  </div>
+  <div style="font-size:12px;color:var(--gray-500);line-height:1.9">
+    📍 คลินิกสุขภาพพืช ภาควิชาโรคพืช<br>
+    คณะเกษตร กำแพงแสน มหาวิทยาลัยเกษตรศาสตร์<br>
+    📞 034-351-893 &nbsp;|&nbsp; เปิดทำการ จ–ศ 08:30–16:30 น.
+  </div>
+</div>
+
+<div class="form-footer">
+  คลินิกสุขภาพพืช กำแพงแสน · ภาควิชาโรคพืช คณะเกษตร มก.<br>
+  ข้อมูลของท่านถูกเก็บรักษาอย่างปลอดภัย
+</div>
+
+</div><!-- end form-container -->
+
+<script>
+// ── SET MIN DATE + BLOCK WEEKENDS ──
+const today = new Date();
+today.setDate(today.getDate() + 1);
+const dateInput = document.getElementById('appt-date');
+dateInput.min = today.toISOString().split('T')[0];
+dateInput.addEventListener('change', function() {
+  const d = new Date(this.value);
+  const day = d.getDay(); // 0=Sun, 6=Sat
+  if (day === 0 || day === 6) {
+    this.value = '';
+    this.classList.add('invalid');
+    document.getElementById('err-date').textContent = 'กรุณาเลือกวันจันทร์–ศุกร์เท่านั้น (คลินิกปิดเสาร์–อาทิตย์)';
+    document.getElementById('err-date').style.display = 'block';
+  } else {
+    this.classList.remove('invalid');
+    document.getElementById('err-date').style.display = 'none';
+  }
+});
+
+// ── TOGGLE DELIVERY METHOD ──
+function toggleDelivery() {
+  const isPostal = document.getElementById('dm-post').checked;
+  document.getElementById('timeslot-section').style.display = isPostal ? 'none' : 'block';
+  document.getElementById('postal-section').style.display = isPostal ? 'block' : 'none';
+  document.getElementById('notice-walkin').style.display = isPostal ? 'none' : 'block';
+  document.getElementById('notice-postal').style.display = isPostal ? 'block' : 'none';
+}
+
+// ── SLIP PREVIEW ──
+function previewSlip(input) {
+  const preview = document.getElementById('slip-preview');
+  if (input.files[0]) {
+    preview.textContent = '✅ แนบไฟล์แล้ว: ' + input.files[0].name;
+  }
+}
+
+// ── STEP NAVIGATION ──
+let currentStep = 1;
+
+function goTo(step) {
+  if (step > currentStep && !validateStep(currentStep)) return;
+  document.getElementById('step' + currentStep).classList.remove('active');
+  currentStep = step;
+  document.getElementById('step' + step).classList.add('active');
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateProgress() {
+  for (let i = 1; i <= 4; i++) {
+    const dot = document.getElementById('dot' + i);
+    const lbl = document.getElementById('lbl' + i);
+    dot.className = 'ps-dot';
+    lbl.className = 'ps-label';
+    if (i < currentStep)      { dot.classList.add('done'); dot.textContent = '✓'; }
+    else if (i === currentStep){ dot.classList.add('active'); lbl.classList.add('active'); }
+  }
+  for (let i = 1; i <= 3; i++) {
+    const line = document.getElementById('line' + i);
+    if (line) line.className = 'ps-line' + (i < currentStep ? ' done' : '');
+  }
+}
+
+// ── VALIDATION ──
+function validateStep(step) {
+  let ok = true;
+  const required = {
+    1: ['fullname','sender-type','phone','province'],
+    2: ['plant','symptoms'],
+    3: [], 4: ['appt-date']
+  };
+  (required[step] || []).forEach(id => {
+    const el = document.getElementById(id);
+    const err = document.getElementById('err-' + id);
+    if (!el || !el.value.trim()) {
+      if (el) el.classList.add('invalid');
+      if (err) err.style.display = 'block';
+      ok = false;
+    } else {
+      el.classList.remove('invalid');
+      if (err) err.style.display = 'none';
+    }
+  });
+
+  // validate plant-part checkboxes
+  if (step === 2) {
+    const partChecked = document.querySelectorAll('input[name="plant-part"]:checked');
+    const errPart = document.getElementById('err-plant-part');
+    if (partChecked.length === 0) { errPart.style.display = 'block'; ok = false; }
+    else errPart.style.display = 'none';
+  }
+
+  if (step === 3) {
+    const sel = document.querySelector('input[name="service"]:checked');
+    const err = document.getElementById('err-service');
+    if (!sel) { err.style.display = 'block'; ok = false; }
+    else err.style.display = 'none';
+  }
+
+  if (step === 4) {
+    // validate delivery method
+    const delivery = document.querySelector('input[name="delivery-method"]:checked');
+    const errDelivery = document.getElementById('err-delivery');
+    if (!delivery) { errDelivery.style.display = 'block'; ok = false; }
+    else errDelivery.style.display = 'none';
+
+    const isPostal = delivery && delivery.value === 'จัดส่งทางไปรษณีย์';
+
+    // validate time slot (เฉพาะมาเอง)
+    if (!isPostal) {
+      const timeOk = document.querySelector('input[name="time-slot"]:checked');
+      const errTime = document.getElementById('err-time');
+      if (!timeOk) { errTime.style.display = 'block'; ok = false; }
+      else errTime.style.display = 'none';
+    }
+
+    // validate slip (เฉพาะส่งไปรษณีย์)
+    if (isPostal) {
+      const slip = document.getElementById('slip-input');
+      const errSlip = document.getElementById('err-slip');
+      if (!slip || slip.files.length === 0) { errSlip.style.display = 'block'; ok = false; }
+      else errSlip.style.display = 'none';
+    }
+
+    const terms = document.getElementById('terms');
+    const errTerms = document.getElementById('err-terms');
+    if (!terms.checked) { errTerms.style.display = 'block'; ok = false; }
+    else errTerms.style.display = 'none';
+  }
+  return ok;
+}
+
+// ── PRICE UPDATE ──
+function updatePrice() {
+  const sel = document.querySelector('input[name="service"]:checked');
+  const box = document.getElementById('price-box');
+  const val = document.getElementById('price-val');
+  const tat = document.getElementById('price-tat');
+  if (!sel) { box.classList.add('hidden'); return; }
+  box.classList.remove('hidden');
+  const price = parseInt(sel.dataset.price);
+  val.textContent = price === 0 ? 'ฟรี' : price.toLocaleString('th-TH') + ' บาท';
+  tat.textContent = 'ระยะเวลาแจ้งผล: ' + sel.dataset.tat;
+}
+
+// ── PHOTO PREVIEW ──
+function previewPhotos(input) {
+  const preview = document.getElementById('photo-preview');
+  preview.innerHTML = '';
+  [...input.files].forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.className = 'photo-thumb';
+      preview.appendChild(img);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// ── SUBMIT ──
+function submitForm() {
+  if (!validateStep(4)) return;
+  const year = new Date().getFullYear() + 543;
+  const num  = String(Math.floor(Math.random() * 9000) + 1000);
+  document.getElementById('ref-id').textContent = 'PHC-' + year + '-' + num;
+  document.getElementById('step4').classList.remove('active');
+  document.getElementById('success-screen').classList.add('show');
+  // Update all dots to done
+  for (let i = 1; i <= 4; i++) {
+    const dot = document.getElementById('dot' + i);
+    dot.className = 'ps-dot done';
+    dot.textContent = '✓';
+  }
+  for (let i = 1; i <= 3; i++) {
+    const line = document.getElementById('line' + i);
+    if (line) line.className = 'ps-line done';
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
